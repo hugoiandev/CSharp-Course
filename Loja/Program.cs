@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Text;
 using Loja.Entities;
 using Loja.Entities.Enums;
 
@@ -15,18 +17,37 @@ namespace Course {
             Console.Write("Email: ");
             string email = Console.ReadLine();
             Console.Write("Birth date (DD/MM/YYYY): ");
-            DateTime birthDate = DateTime.Parse(Console.ReadLine());
+            DateTime birthDate = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
             Console.WriteLine();
-
-            Order order = new Order();
-
-            order.Client = new Client(name, email, birthDate);
 
             Console.WriteLine("Enter order data:");
             Console.Write("Status: ");
-            string Status = Console.ReadLine();
+            OrderStatus status = Enum.Parse<OrderStatus>(Console.ReadLine());
 
+            Client client = new Client(name, email, birthDate);
+            Order order = new Order(DateTime.Now, status, client);
 
+            Console.Write("How many items to this order? ");
+            int n = int.Parse(Console.ReadLine());
+
+            for(int i = 0; i < n; i++) {
+
+                Console.WriteLine($"Enter #{i + 1} item data:");
+                Console.Write("Product name: ");
+                string productName = Console.ReadLine();
+                Console.Write("Product price: ");
+                double productPrice = double.Parse(Console.ReadLine());
+                Console.Write("Quantity: ");
+                int quantity = int.Parse(Console.ReadLine());
+
+                Product product = new Product(productName, productPrice);
+                OrderItem item = new OrderItem(quantity, productPrice, product);
+
+                order.AddItem(item);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(order);
         }
     }
     

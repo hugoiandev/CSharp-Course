@@ -19,5 +19,10 @@ namespace Loja.Entities {
 
         }
 
+        public override string ToString() {
+
+            return Name + " (" + BirthDate + ") - " + Email;
+        }
+
     }
 }
